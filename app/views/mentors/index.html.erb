@@ -1,0 +1,16 @@
+<h1>Hi <%= current_user.first_name %> 👋</h1>
+<p>Who do you need today?</p>
+
+<div class="row">
+  <% @mentors.each do |mentor| %>
+    <div class="col-6 col-md-4 mb-4">
+      <%= link_to mentor_path(mentor), class: "text-decoration-none text-dark" do %>
+        <div class="card text-center p-3 h-100">
+          <div class="mentor-avatar"><%= mentor.avatar %></div>
+          <h5 class="mt-2 mb-0"><%= mentor.name %></h5>
+          <small class="text-muted"><%= mentor.specialty %></small>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

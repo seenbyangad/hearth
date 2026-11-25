@@ -2,6 +2,7 @@
 
 <% if user_signed_in? %>
   <p>You are logged in as <%= current_user.email %>.</p>
+  <%= link_to "Meet the mentors", mentors_path, class: "btn btn-primary" %>
 <% else %>
   <p>Sign up or log in to get started.</p>
 <% end %>

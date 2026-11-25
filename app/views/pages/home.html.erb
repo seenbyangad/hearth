@@ -1,2 +1,7 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<h1>Welcome to Hearth</h1>
+
+<% if user_signed_in? %>
+  <p>You are logged in as <%= current_user.email %>.</p>
+<% else %>
+  <p>Sign up or log in to get started.</p>
+<% end %>

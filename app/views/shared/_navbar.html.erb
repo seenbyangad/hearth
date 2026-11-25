@@ -1,0 +1,14 @@
+<nav class="navbar navbar-expand navbar-light bg-light px-3">
+  <%= link_to "Hearth", root_path, class: "navbar-brand" %>
+
+  <div class="ms-auto d-flex align-items-center gap-3">
+    <% if user_signed_in? %>
+      <span>Hi, <%= current_user.first_name %>!</span>
+      <%= link_to "My account", edit_user_registration_path %>
+      <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "btn btn-outline-secondary btn-sm" %>
+    <% else %>
+      <%= link_to "Log in", new_user_session_path %>
+      <%= link_to "Sign up", new_user_registration_path, class: "btn btn-primary btn-sm" %>
+    <% end %>
+  </div>
+</nav>

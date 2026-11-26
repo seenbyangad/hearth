@@ -1,8 +1,31 @@
-<h1>Welcome to Hearth</h1>
+<div class="text-center py-4">
+  <div class="fs-1">🔥</div>
+  <h1>Hearth</h1>
+  <p class="lead">Mentors who remember you.</p>
+  <p class="text-muted">
+    Living alone for the first time? Hearth gives you six friendly AI mentors
+    for the small stuff that feels big: stress, cooking, money, sleep and focus.
+  </p>
 
-<% if user_signed_in? %>
-  <p>You are logged in as <%= current_user.email %>.</p>
-  <%= link_to "Meet the mentors", mentors_path, class: "btn btn-primary" %>
-<% else %>
-  <p>Sign up or log in to get started.</p>
-<% end %>
+  <% if user_signed_in? %>
+    <%= link_to "Meet the mentors", mentors_path, class: "btn btn-primary btn-lg" %>
+    <%= link_to "My chats", chats_path, class: "btn btn-outline-primary btn-lg" %>
+  <% else %>
+    <%= link_to "Get started", new_user_registration_path, class: "btn btn-primary btn-lg" %>
+    <%= link_to "Log in", new_user_session_path, class: "btn btn-outline-primary btn-lg" %>
+  <% end %>
+</div>
+
+<h2 class="h4 text-center mt-4 mb-3">Meet your mentors</h2>
+<div class="row">
+  <% @mentors.each do |mentor| %>
+    <div class="col-6 col-md-4 mb-4">
+      <div class="card text-center p-3 h-100">
+        <div class="mentor-avatar"><%= mentor.avatar %></div>
+        <h5 class="mt-2 mb-0"><%= mentor.name %></h5>
+        <small class="text-muted"><%= mentor.specialty %></small>
+        <p class="small mt-2 mb-0"><%= mentor.tagline %></p>
+      </div>
+    </div>
+  <% end %>
+</div>

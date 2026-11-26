@@ -4,6 +4,7 @@
   <div class="ms-auto d-flex align-items-center gap-3">
     <% if user_signed_in? %>
       <%= link_to "Mentors", mentors_path %>
+      <%= link_to "My chats", chats_path %>
       <span>Hi, <%= current_user.first_name %>!</span>
       <%= link_to "My account", edit_user_registration_path %>
       <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "btn btn-outline-secondary btn-sm" %>

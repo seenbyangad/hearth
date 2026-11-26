@@ -1,0 +1,31 @@
+// Chat page: messages look like speech bubbles
+.chat-page {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  white-space: pre-wrap; // keep the line breaks the AI writes
+}
+
+// The mentor's messages are on the left
+.chat-bubble-mentor {
+  align-self: flex-start;
+  background-color: #f1f3f5;
+}
+
+// My messages are on the right
+.chat-bubble-user {
+  align-self: flex-end;
+  background-color: #0d6efd;
+  color: white;
+}

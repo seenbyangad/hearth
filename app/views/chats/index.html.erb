@@ -1,0 +1,20 @@
+<h1>My chats</h1>
+
+<% if @chats.empty? %>
+  <p class="text-muted">You haven't chatted with anyone yet.</p>
+  <%= link_to "Meet the mentors", mentors_path, class: "btn btn-primary" %>
+<% else %>
+  <div class="list-group">
+    <% @chats.each do |chat| %>
+      <%= link_to chat_path(chat), class: "list-group-item list-group-item-action d-flex align-items-center gap-3" do %>
+        <span class="fs-2"><%= chat.mentor.avatar %></span>
+        <div>
+          <div class="fw-bold"><%= chat.title %></div>
+          <small class="text-muted">
+            <%= chat.mentor.name %> · <%= chat.created_at.strftime("%d %b %Y") %>
+          </small>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

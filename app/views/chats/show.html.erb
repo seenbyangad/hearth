@@ -1,0 +1,41 @@
+<div class="chat-page">
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <div class="mentor-avatar"><%= @chat.mentor.avatar %></div>
+    <div>
+      <h1 class="h3 mb-0"><%= @chat.mentor.name %></h1>
+      <small class="text-muted"><%= @chat.mentor.tagline %></small>
+    </div>
+  </div>
+
+  <div class="chat-messages mb-3">
+    <%# A friendly hello from the mentor at the top of every chat (it is not saved in the database) %>
+    <div class="chat-bubble chat-bubble-mentor">
+      Hi <%= current_user.first_name %>, I'm <%= @chat.mentor.name %>. <%= @chat.mentor.tagline %> What's on your mind?
+    </div>
+
+    <% @chat.messages.order(:created_at).each do |message| %>
+      <% if message.role == "user" %>
+        <div class="chat-bubble chat-bubble-user"><%= message.content %></div>
+      <% else %>
+        <div class="chat-bubble chat-bubble-mentor"><%= message.content %></div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <%= simple_form_for [@chat, @message] do |f| %>
+    <%= f.input :content,
+                label: false,
+                placeholder: "Write to #{@chat.mentor.name}...",
+                input_html: { rows: 2 } %>
+    <%# While we wait for the AI, the button text changes so the user knows something is happening %>
+    <%= f.button :submit, "Send",
+                 class: "btn btn-primary",
+                 data: { turbo_submits_with: "#{@chat.mentor.name} is thinking..." } %>
+  <% end %>
+
+  <div class="mt-4">
+    <%= link_to "← Back to #{@chat.mentor.name}", mentor_path(@chat.mentor) %>
+    ·
+    <%= link_to "My chats", chats_path %>
+  </div>
+</div>

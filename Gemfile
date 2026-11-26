@@ -74,4 +74,4 @@ end
 
 gem "devise", "~> 5.0"
 
-gem "anthropic", "~> 2.14"
+gem "ruby_llm", "~> 2.2"

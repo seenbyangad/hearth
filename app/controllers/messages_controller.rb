@@ -35,47 +35,30 @@ class MessagesController < ApplicationController
     params.require(:message).permit(:content)
   end
 
-  # Sends the whole conversation to Claude and returns the mentor's answer as text.
+  # Sends the whole conversation to the AI and returns the mentor's answer as text.
   # Sending ALL the messages every time is how the mentor "remembers" the conversation.
   def ask_mentor
-    # Claude wants the conversation as a list like:
-    #   [{ role: "user", content: "Hi" }, { role: "assistant", content: "Hello!" }, ...]
-    # Our messages table has exactly these two columns, so we just copy them over.
-    conversation = []
-    @chat.messages.order(:created_at).each do |message|
-      conversation << { role: message.role, content: message.content }
-    end
+    llm_chat = RubyLLM.chat(model: "gpt-4.1-mini")
 
     # The system prompt is the mentor's personality (saved in the seeds).
     # We also tell the mentor the user's first name, so it feels personal.
-    instructions = "#{@chat.mentor.system_prompt} " \
-                   "The person you are talking to is called #{current_user.first_name}."
-
-    # The client reads the ANTHROPIC_API_KEY from the .env file
-    client = Anthropic::Client.new
-
-    response = client.beta.messages.create(
-      model: "claude-opus-5-5",
-      max_tokens: 1000,
-      system_: instructions,
-      messages: conversation,
-      # Short chat answers don't need deep thinking, and "low" answers faster
-      output_config: { effort: "low" },
-      # If Claude says no to a message for safety reasons, Anthropic automatically tries another model
-      fallbacks: "default",
-      betas: ["server-side-fallback-2026-07-01"]
+    llm_chat.with_instructions(
+      "#{@chat.mentor.system_prompt} " \
+      "The person you are talking to is called #{current_user.first_name}."
     )
 
-    # The answer comes back in "blocks". We only keep the text blocks.
-    answer = ""
-    response.content.each do |block|
-      answer += block.text if block.type == :text
+    # Give the AI every message of this chat, oldest first
+    @chat.messages.order(:created_at).each do |message|
+      llm_chat.add_message(role: message.role.to_sym, content: message.content)
     end
-    answer
-  rescue Anthropic::Errors::Error => e
-    # Something went wrong (no API key, no internet, Claude is busy...).
+
+    # Ask the AI to write the next message (the mentor's answer)
+    response = llm_chat.complete
+    response.content
+  rescue RubyLLM::Error, RubyLLM::ConfigurationError => e
+    # Something went wrong (no API key, no internet, the AI is busy...).
     # Write it in the server logs so we can see what happened, and return nothing.
-    Rails.logger.error("Claude error: #{e.class} - #{e.message}")
+    Rails.logger.error("AI error: #{e.class} - #{e.message}")
     nil
   end
 end

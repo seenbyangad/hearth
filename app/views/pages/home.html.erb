@@ -15,17 +15,3 @@
     <%= link_to "Log in", new_user_session_path, class: "btn btn-outline-primary btn-lg" %>
   <% end %>
 </div>
-
-<h2 class="h4 text-center mt-4 mb-3">Meet your mentors</h2>
-<div class="row">
-  <% @mentors.each do |mentor| %>
-    <div class="col-6 col-md-4 mb-4">
-      <div class="card text-center p-3 h-100">
-        <div class="mentor-avatar"><%= mentor.avatar %></div>
-        <h5 class="mt-2 mb-0"><%= mentor.name %></h5>
-        <small class="text-muted"><%= mentor.specialty %></small>
-        <p class="small mt-2 mb-0"><%= mentor.tagline %></p>
-      </div>
-    </div>
-  <% end %>
-</div>
